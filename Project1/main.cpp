@@ -65,10 +65,6 @@ void tree::delete_leaf1(node* t, int local_h)
     {
         local_h++;
         delete_leaf1(t->l,local_h);
-        
-       
-
-
     }
     delete_leaf1(t->r,local_h);
 
@@ -162,6 +158,7 @@ void task1()
     t.push(3);
     t.push(5);
     t.push(2);
+   
     t.print();
     t.switch_tree();
     cout << endl;
@@ -282,55 +279,107 @@ double tree1::evaluate(node* root)
 }
 
 
+int fact(int n)
+{
+    if (n == 1) return 1;
 
-
+    return n*fact(n - 1);
+}
+struct var
+{
+    char cx = 'x';
+    char cy = 'y';
+    int x;
+    int y;
+};
 void task3(char *arr, int size)
 {
+    
     int c;
+    int check, check1;
+    check = 2;
+   
+    check1 = pow(2,check);
+    int access = 0;
     srand(time(NULL));
-    tree1 t;
-    for (int i = 0; i < size; i++)
+    var f; var* s = new var[check1];
+    int count = 0;
+    while (count != check1)
     {
-        if (arr[i]=='x'||arr[i]=='y')
-        {
-            if (rand() % 100 > 50)
-            {
-                arr[i] = '0';
-            }
-            else arr[i] = '1';
-        }
-    }
-    for (int i = 0; i < size; i++)
-    {
-        if ((arr[i]== '0'||arr[i]=='1')&&(arr[i-1]!='|'&&arr[i+1]!='|')&& (arr[i - 1] != '&' && arr[i + 1] != '&'))
+        tree1 t;
+        access=0;
+
+        while (access == 0)
         {
             
-            c = arr[i] - '0';
-            t.push(c);
-        }
-        if (arr[i]=='&')
-        {
-            int a,b;
-            a = arr[i - 1] - '0';
-            b = arr[i + 1] - '0';
-            a += b;
-            t.push(a);
-        }
-        if (arr[i]=='|')
-        {
+            access = 1;
             if (rand() % 100 > 50)
             {
-               c= arr[i-1] - '0';
+                f.cx = '0';
             }
-            else c = arr[i+1] - '1';
-            t.push(c);
+            else f.cx = '1';
+            if (rand() % 100 > 50)
+            {
+                f.cy = '0';
+            }
+            else f.cy = '1';
+            for (int i = 0; i < check1; i++)
+            {
+                if (f.cx == s[i].cx && f.cy == s[i].cy)
+                {
+                    access = 0;
+                }
+            }
         }
+        cout << "=============" << endl;
+        cout << "x=" << f.cx << endl;
+        cout << "y=" << f.cy << endl;
+        s[count].cx = f.cx;
+        s[count].cy = f.cy;
+        
+        
+        for (int i = 0; i < size; i++)
+        {
+            if (arr[i] == 'x') arr[i] = f.cx;
+            if (arr[i] == 'y') arr[i] = f.cy;
+        }
+        for (int i = 0; i < size; i++)
+        {
+            if ((arr[i] == '0' || arr[i] == '1') && (arr[i - 1] != '|' && arr[i + 1] != '|') && (arr[i - 1] != '&' && arr[i + 1] != '&'))
+            {
 
+                c = arr[i] - '0';
+                t.push(c);
+            }
+            if (arr[i] == '&')
+            {
+                int a, b;
+                a = arr[i - 1] - '0';
+                b = arr[i + 1] - '0';
+                a += b;
+                t.push(a);
+            }
+            if (arr[i] == '|')
+            {
+                if (rand() % 100 > 50)
+                {
+                    c = arr[i - 1] - '0';
+                }
+                else c = arr[i + 1] - '0';
+                t.push(c);
+            }
+
+        }
+       
+        cout << "Tree:" << endl;
+        t.print();
+      
+        cout << "Result: " << t.evaluate1() << endl;
+        cout << endl;
+        count++;
     }
-    t.print();
     
-    cout << t.evaluate1() << endl;
-
+    
 }
 
 
@@ -341,7 +390,7 @@ int task4(int **arr, int size)
     int check=0;
     for (int i = 0; i < size; i++)
     {
-        for (int j = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
         {
             if (arr[i][j]==1)
             {
@@ -350,7 +399,7 @@ int task4(int **arr, int size)
         }
         if (check != 2)
         {
-            cout << "Матрица ациклічна" << endl;
+            cout << "Матрица ациклiчна" << endl;
             return 1;
 
         }
@@ -369,7 +418,7 @@ int main()
 {
 	setlocale(LC_ALL, "rus");
     char arr[20]{ "x|y-x&y" };
-    //task3(arr,7);
+   
     int** arr2 = new  int*[3];
     for (int i = 0; i < 3; i++)
     {
@@ -384,8 +433,10 @@ int main()
     arr2[2][0] = 1;
     arr2[2][1] = 1;
     arr2[2][2] = 0;
-
-    task4(arr2, 3);
+    //task1();
+    //task2();
+    //task3(arr,7);
+    //task4(arr2, 3);
 
 	return 0;
 }
